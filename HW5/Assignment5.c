@@ -4,7 +4,7 @@
 #include "hardware/spi.h"
 #include "pico/stdio_usb.h"
 
-// SPI configuration
+// SPI config
 #define SPI_PORT spi0
 #define PIN_MISO 16
 #define PIN_CS_DAC 17
@@ -12,13 +12,13 @@
 #define PIN_SCK 18
 #define PIN_MOSI 19
 
-// 23K256 SRAM commands
+// 23K256 SRAM 
 #define SRAM_READ  0x03
 #define SRAM_WRITE 0x02
 #define SRAM_WRSR  0x01
-#define SRAM_MODE  0x40  // Sequential mode
+#define SRAM_MODE  0x40  
 
-#define NUM_SAMPLES 1000  // Must not exceed 8192
+#define NUM_SAMPLES 1000  
 #define DELAY_MS 1
 
 union FloatBytes {
@@ -47,7 +47,7 @@ void sram_init() {
 }
 
 void sram_write_float(uint16_t addr, float value) {
-    if (addr > 0x7FFC) return; // Prevent overflow
+    if (addr > 0x7FFC) return; 
     uint8_t cmd[3] = {
         SRAM_WRITE,
         (uint8_t)(addr >> 8),
@@ -114,13 +114,11 @@ int main() {
 
     sram_init();
 
-    // Store one cycle of sine wave as floats in SRAM
     for (int i = 0; i < NUM_SAMPLES; i++) {
         float value = 3.3f * (0.5f + 0.5f * sinf(2.0f * M_PI * i / NUM_SAMPLES));
         sram_write_float(i * 4, value);
     }
 
-    // Output 1Hz sine wave from SRAM to DAC and Serial Plotter
     while (true) {
         for (int i = 0; i < NUM_SAMPLES; i++) {
             float value = sram_read_float(i * 4);
