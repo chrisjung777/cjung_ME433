@@ -1,0 +1,2 @@
+In these plots, I used 100 samples of equal weight. I used a moving average filter to smooth 
+the signal data.The cutoff frequency is around 7.96 Hz. I used a broad bandwith.
